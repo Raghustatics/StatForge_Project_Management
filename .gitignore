@@ -1,0 +1,30 @@
+# Internal Minitab fixtures — never commit (AGENTS.md §3, D-014, R-07)
+sources/Business_Cases_Examples/
+
+# Secrets and local settings
+.env
+.claude/settings.local.json
+.claude/.stop_hook_state.json
+
+# Executor scratch (superpowers plan workspace)
+.superpowers/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Node / web
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo

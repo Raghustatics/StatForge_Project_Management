@@ -1,0 +1,11 @@
+sources/
+docs/
+.git/
+.claude/
+.superpowers/
+**/node_modules
+.venv
+**/dist
+**/coverage
+**/__pycache__
+.env
