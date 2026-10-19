@@ -3,7 +3,7 @@
 import pytest
 from stack_helpers import compose, get, health, read_env, wait_for
 
-pytestmark = [pytest.mark.integration, pytest.mark.tc("TC-01.2")]
+pytestmark = [pytest.mark.integration]
 
 
 def _component(body: dict[str, object], name: str) -> object:

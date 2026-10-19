@@ -20,7 +20,6 @@ def _client(db: CheckResult, s3: CheckResult) -> TestClient:
     return TestClient(create_app(checks={"db": lambda: db, "s3": lambda: s3}))
 
 
-@pytest.mark.tc("TC-01.2")
 def test_health_ok_when_all_components_ok() -> None:
     response = _client(OK, OK).get("/health")
     assert response.status_code == 200
@@ -33,7 +32,6 @@ def test_health_ok_when_all_components_ok() -> None:
     }
 
 
-@pytest.mark.tc("TC-01.2")
 def test_health_503_when_db_down() -> None:
     response = _client(DB_DOWN, OK).get("/health")
     assert response.status_code == 503
@@ -46,14 +44,12 @@ def test_health_503_when_db_down() -> None:
     assert body["components"]["s3"]["status"] == "ok"
 
 
-@pytest.mark.tc("TC-01.2")
 def test_health_503_when_s3_down() -> None:
     response = _client(OK, S3_DOWN).get("/health")
     assert response.status_code == 503
     assert response.json()["components"]["s3"]["status"] == "down"
 
 
-@pytest.mark.tc("TC-01.2")
 def test_check_db_hides_connection_details(caplog: pytest.LogCaptureFixture) -> None:
     caplog.set_level(logging.DEBUG)
     result = check_db("postgresql://u:s3cretpw@127.0.0.1:1/x", timeout_s=0.5)
@@ -92,7 +88,6 @@ def silent_server() -> Iterator[int]:
     server.close()
 
 
-@pytest.mark.tc("TC-01.2")
 def test_check_db_times_out_on_silent_server(silent_server: int) -> None:
     started = time.monotonic()
     result = check_db(f"postgresql://u:p@127.0.0.1:{silent_server}/x", timeout_s=1.0)
@@ -100,7 +95,6 @@ def test_check_db_times_out_on_silent_server(silent_server: int) -> None:
     assert time.monotonic() - started < 3.0
 
 
-@pytest.mark.tc("TC-01.2")
 def test_health_is_bounded_when_a_check_hangs() -> None:
     def hangs() -> CheckResult:
         time.sleep(5)
@@ -118,7 +112,6 @@ def test_health_is_bounded_when_a_check_hangs() -> None:
     assert response.json()["components"]["s3"]["status"] == "ok"
 
 
-@pytest.mark.tc("TC-01.2")
 def test_check_s3_down_when_unreachable(caplog: pytest.LogCaptureFixture) -> None:
     caplog.set_level(logging.DEBUG)
     result = check_s3("http://127.0.0.1:1", "key-id", "s3cretkey", timeout_s=0.5)
@@ -126,7 +119,6 @@ def test_check_s3_down_when_unreachable(caplog: pytest.LogCaptureFixture) -> Non
     assert "s3cretkey" not in caplog.text
 
 
-@pytest.mark.tc("TC-01.2")
 def test_default_checks_read_settings_from_environment(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("DATABASE_URL", "postgresql://u:p@127.0.0.1:1/x")
     monkeypatch.setenv("S3_ENDPOINT_URL", "http://127.0.0.1:1")
