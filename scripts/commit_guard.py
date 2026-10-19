@@ -1,8 +1,8 @@
 """Test-first commit guard (AGENTS.md §4.1.4).
 
 Blocks a commit that changes product code (apps/, packages/, plugins/) when the
-touched unit has no tests for the active gate, either staged in the same commit
-or already tracked.
+touched unit has no tests of its own for the active gate (inside the unit), either
+staged in the same commit or already tracked. Repo-level tests/ do not count.
 
 Modes:
   --hook       Claude Code PreToolUse hook: reads the tool call JSON on stdin and
@@ -75,11 +75,7 @@ def evaluate(staged: Sequence[str], test_files: Mapping[str, str], gate: str) ->
         for path, text in test_files.items()
         if is_test_file(path) and any(tc.startswith(prefix) for tc in tc_ids_in(text))
     ]
-    missing = [
-        unit
-        for unit in units
-        if not any(p.startswith(f"{unit}/") or p.startswith("tests/") for p in gate_tests)
-    ]
+    missing = [unit for unit in units if not any(p.startswith(f"{unit}/") for p in gate_tests)]
     if missing:
         return GuardDecision(
             False,

@@ -35,11 +35,13 @@ def test_allows_tests_first_then_code() -> None:
     assert second.allowed is True
 
 
-def test_root_tests_count_for_any_unit() -> None:
+def test_root_tests_do_not_vouch_for_a_unit() -> None:
+    # Repo-level tests (tests/repo, tests/integration) say nothing about a new unit's code.
     decision = commit_guard.evaluate(
-        ["packages/engine/src/statforge_engine/x.py"], {"tests/repo/test_a.py": G01_TEST}, "G01"
+        ["plugins/demo/demo.py"], {"tests/repo/test_a.py": G01_TEST}, "G01"
     )
-    assert decision.allowed is True
+    assert decision.allowed is False
+    assert "plugins/demo" in decision.reason
 
 
 def test_docs_only_commit_allowed() -> None:
