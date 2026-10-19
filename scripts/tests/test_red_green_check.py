@@ -51,9 +51,7 @@ def test_fails_without_evidence_file() -> None:
 
 
 def test_fails_when_evidence_shows_no_failure() -> None:
-    problems = check(
-        [_red(T0 + 10), _green(T0 + 20)], [_ev(T0, text="4 passed")], TCS, "G01"
-    )
+    problems = check([_red(T0 + 10), _green(T0 + 20)], [_ev(T0, text="4 passed")], TCS, "G01")
     assert any("no RED evidence" in p for p in problems)
 
 
@@ -69,8 +67,11 @@ def test_other_gate_commits_ignored() -> None:
 
 
 def test_multiple_tcs_in_one_subject_count_for_each() -> None:
-    commits = [_red(T0 + 10), _green(T0 + 20, "feat(G01): GREEN TC-01.1"),
-               _green(T0 + 30, "fix(G01): GREEN TC-01.2 follow-up")]
+    commits = [
+        _red(T0 + 10),
+        _green(T0 + 20, "feat(G01): GREEN TC-01.1"),
+        _green(T0 + 30, "fix(G01): GREEN TC-01.2 follow-up"),
+    ]
     assert check(commits, [_ev(T0)], TCS, "G01") == []
 
 
