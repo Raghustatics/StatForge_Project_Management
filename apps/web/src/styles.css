@@ -1,0 +1,30 @@
+:root {
+  --sf-color-text: #1b1f24;
+  --sf-color-muted: #4a5360;
+  --sf-color-bg: #ffffff;
+  --sf-color-alert: #a4161a;
+  --sf-color-focus: #0b5cad;
+  --sf-space: 1rem;
+  font-family: system-ui, "Segoe UI", sans-serif;
+  color: var(--sf-color-text);
+  background: var(--sf-color-bg);
+}
+
+.placeholder {
+  max-width: 40rem;
+  margin: calc(var(--sf-space) * 4) auto;
+  padding: 0 var(--sf-space);
+}
+
+.placeholder p {
+  color: var(--sf-color-muted);
+}
+
+.placeholder [role="alert"] {
+  color: var(--sf-color-alert);
+}
+
+:focus-visible {
+  outline: 3px solid var(--sf-color-focus);
+  outline-offset: 2px;
+}
