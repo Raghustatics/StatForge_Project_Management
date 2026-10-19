@@ -31,7 +31,11 @@ def test_stop_hook_wired() -> None:
 @pytest.mark.tc("TC-01.8")
 def test_commit_guard_wired_for_bash_and_powershell() -> None:
     pre = _settings()["hooks"]["PreToolUse"]
-    guard = [e for e in pre if any("commit_guard.py --hook" in c for c in _commands([e]))]
+    guard = [
+        e
+        for e in pre
+        if any("scripts/commit_guard.py" in c and c.endswith("--hook") for c in _commands([e]))
+    ]
     assert len(guard) == 1
     assert set(guard[0]["matcher"].split("|")) == {"Bash", "PowerShell"}
 

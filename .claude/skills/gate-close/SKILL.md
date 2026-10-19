@@ -9,7 +9,8 @@ description: Close a StatForge gate after the owner has recorded PASS: commit re
 
 - `docs/GATE_LOG.md` shows **PASS** or **PASS WITH CONDITIONS** for the gate, written by the owner. Agents never write it.
 - `gh auth status` succeeds and `origin` = `https://github.com/Raghustatics/StatForge_Project_Management.git`.
-- The full test suite passes on the gate branch, and `scripts/verify.ps1` is green.
+- **Re-verify independently (D-031, D-032e):** with the stack up (`docker compose up -d --wait`), run it yourself in this session: `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1 -Mode Full -IncludeColdStart`. Do this even if the Stop hook released earlier with "NOT done", and even if it reported green. Never rely on an earlier run. On any `[FAIL]`, stop: no merge, no tag, no push. Report the failures to the owner.
+- Free plan (D-031): GitHub doesn't block merges server-side, so this refusal is the merge gate.
 
 ## Steps
 

@@ -38,6 +38,7 @@ def _verify(*args: str, path: str | None = None) -> subprocess.CompletedProcess[
         env=env,
         capture_output=True,
         text=True,
+        encoding="utf-8",
         check=False,
     )
 
