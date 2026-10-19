@@ -1,0 +1,13 @@
+
+=================================== ERRORS ====================================
+_______________ ERROR collecting scripts/tests/test_tc_trace.py _______________
+ImportError while importing test module 'C:\Users\60073\Python\New_Stat_Forge_v2\scripts\tests\test_tc_trace.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+scripts\tests\test_tc_trace.py:7: in <module>
+    import tc_trace
+E   ModuleNotFoundError: No module named 'tc_trace'
+=========================== short test summary info ===========================
+ERROR scripts/tests/test_tc_trace.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.12s
