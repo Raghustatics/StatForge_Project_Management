@@ -1,0 +1,10 @@
+﻿Command: docker compose config (with .env missing)
+docker : error while interpolating x-required.POSTGRES_USER: required variable POSTGRES_USER is missing a value: Copy 
+.env.example to .env first (see README Setup)
+At line:1 char:388
++ ... 2; Move-Item .env .env.bak; $out = docker compose config 2>&1 | Out-S ...
++                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (error while int...e README Setup):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+

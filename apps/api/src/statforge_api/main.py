@@ -4,7 +4,7 @@ from collections.abc import Mapping
 
 from fastapi import FastAPI, Response
 
-from statforge_api.health import Check, HealthResponse, check_db, check_s3
+from statforge_api.health import Check, HealthResponse, check_db, check_s3, run_checks
 from statforge_api.settings import Settings
 from statforge_api.version import VersionResponse, current_version
 
@@ -19,7 +19,7 @@ def _default_checks() -> dict[str, Check]:
     }
 
 
-def create_app(checks: Mapping[str, Check] | None = None) -> FastAPI:
+def create_app(checks: Mapping[str, Check] | None = None, check_timeout_s: float = 3.0) -> FastAPI:
     app = FastAPI(title="StatForge API", version=current_version().version)
     resolved: dict[str, Check] | None = dict(checks) if checks is not None else None
 
@@ -28,7 +28,7 @@ def create_app(checks: Mapping[str, Check] | None = None) -> FastAPI:
         nonlocal resolved
         if resolved is None:
             resolved = _default_checks()
-        components = {name: check() for name, check in resolved.items()}
+        components = run_checks(resolved, check_timeout_s)
         healthy = all(result.status == "ok" for result in components.values())
         response.status_code = 200 if healthy else 503
         return HealthResponse(status="ok" if healthy else "unavailable", components=components)

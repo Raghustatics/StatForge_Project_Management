@@ -98,3 +98,21 @@ def test_check_db_times_out_on_silent_server(silent_server: int) -> None:
     result = check_db(f"postgresql://u:p@127.0.0.1:{silent_server}/x", timeout_s=1.0)
     assert result.status == "down"
     assert time.monotonic() - started < 3.0
+
+
+@pytest.mark.tc("TC-01.2")
+def test_health_is_bounded_when_a_check_hangs() -> None:
+    def hangs() -> CheckResult:
+        time.sleep(5)
+        return OK
+
+    app = create_app(checks={"db": hangs, "s3": lambda: OK}, check_timeout_s=0.5)
+    started = time.monotonic()
+    response = TestClient(app).get("/health")
+    assert time.monotonic() - started < 2.0
+    assert response.status_code == 503
+    assert response.json()["components"]["db"] == {
+        "status": "down",
+        "detail": "The database is not reachable.",
+    }
+    assert response.json()["components"]["s3"]["status"] == "ok"

@@ -21,6 +21,7 @@ STEP_LABELS = (
     "image rm",
     "image inspect",
     "build --no-cache --pull",
+    "build",
     "up -d --wait",
     "ps --format json",
     "down -v --rmi local",
@@ -103,7 +104,7 @@ def test_down_runs_even_when_up_fails(tmp_path: Path) -> None:
 def test_never_prunes(tmp_path: Path) -> None:
     runner = FakeRunner()
     cold_start.run_cold_start(ROOT, tmp_path / "c", runner=runner, clock=Clock())
-    assert not any("prune" in " ".join(cmd) for cmd in runner.calls)
+    assert not any("prune" in cmd for cmd in runner.calls)  # token, not substring of paths
 
 
 def test_precondition_fails_when_base_image_remains(tmp_path: Path) -> None:
