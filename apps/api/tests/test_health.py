@@ -8,7 +8,6 @@ from collections.abc import Iterator
 
 import pytest
 from fastapi.testclient import TestClient
-
 from statforge_api.health import CheckResult, check_db
 from statforge_api.main import create_app
 
