@@ -88,9 +88,9 @@ def evaluate(staged: Sequence[str], test_files: Mapping[str, str], gate: str) ->
     return GuardDecision(True, "ok")
 
 
-def _git(*args: str) -> str:
+def _git(*args: str, cwd: Path | None = None) -> str:
     return subprocess.run(
-        ["git", *args], capture_output=True, text=True, check=True, encoding="utf-8"
+        ["git", *args], cwd=cwd, capture_output=True, text=True, check=True, encoding="utf-8"
     ).stdout
 
 
@@ -98,20 +98,26 @@ def _lines(text: str) -> list[str]:
     return [line for line in text.splitlines() if line.strip()]
 
 
-def _collect(include_unstaged: bool) -> tuple[list[str], dict[str, str]]:
-    staged = _lines(_git("diff", "--cached", "--name-only"))
+def _collect(root: Path, include_unstaged: bool) -> tuple[list[str], dict[str, str]]:
+    """All paths are repo-root relative, whatever directory the hook runs from."""
+    staged = _lines(_git("diff", "--cached", "--name-only", cwd=root))
     if include_unstaged:
-        staged += [p for p in _lines(_git("diff", "--name-only")) if p not in staged]
+        unstaged = _lines(_git("diff", "--name-only", cwd=root))
+        staged += [p for p in unstaged if p not in staged]
     tests: dict[str, str] = {}
-    for path in _lines(_git("ls-files")):
+    for path in _lines(_git("ls-files", cwd=root)):
         if is_test_file(path):
             show = subprocess.run(
-                ["git", "show", f":{path}"], capture_output=True, text=True, encoding="utf-8"
+                ["git", "show", f":{path}"],
+                cwd=root,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
             )
             if show.returncode == 0:
                 tests[path] = show.stdout
-            elif include_unstaged and Path(path).exists():
-                tests[path] = Path(path).read_text(encoding="utf-8")
+            elif include_unstaged and (root / path).exists():
+                tests[path] = (root / path).read_text(encoding="utf-8")
     return staged, tests
 
 
@@ -120,7 +126,7 @@ def _decide(include_unstaged: bool) -> GuardDecision:
     gate_log = root / GATE_LOG
     if not gate_log.exists():
         return GuardDecision(True, "no gate log; guard not applicable")
-    staged, tests = _collect(include_unstaged)
+    staged, tests = _collect(root, include_unstaged)
     return evaluate(staged, tests, active_gate(gate_log))
 
 

@@ -224,3 +224,14 @@ def test_main_allows_outside_a_gated_repo(tmp_path: Path, monkeypatch: pytest.Mo
     _git(tmp_path, "init", "-q")
     commit = json.dumps({"tool_input": {"command": "git commit -m x"}})
     assert _main_in(tmp_path, monkeypatch, ["--hook"], commit) == 0
+
+
+def test_hook_from_a_subdirectory_uses_repo_root_paths(repo: Path) -> None:
+    code = repo / "apps" / "api" / "src" / "demo.py"
+    test = repo / "apps" / "api" / "tests" / "test_demo.py"
+    code.parent.mkdir(parents=True)
+    test.parent.mkdir(parents=True)
+    code.write_text("X = 1\n")
+    test.write_text(G01_TEST)
+    _git(repo, "add", "apps")
+    assert _hook(repo / "apps" / "api", "git commit -m demo").returncode == 0
