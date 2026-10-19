@@ -1,0 +1,81 @@
+﻿RED evidence for TC-01.3 (G01) at 20261019T190043Z UTC
+Command: pnpm --filter @statforge/web test
+powershell.exe : ? Verifying lockfile against supply-chain policies (266 entries)...
+At C:\Users\60073\Python\New_Stat_Forge_v2\scripts\capture_red.ps1:24 char:11
++ $output = & (Join-Path $PSHOME "powershell.exe") -NoProfile -Command  ...
++           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (? Verifying loc...266 entries)...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Ô£ô Lockfile passes supply-chain policies (266 entries in 1.3s)
+Lockfile is up to date, resolution step is skipped
+Already up to date
+Done in 1.4s using pnpm v12.14.0
+$ vitest run
+
+ RUN  v5.0.5 C:/Users/60073/Python/New_Stat_Forge_v2/apps/web
+
+ ÔØ» src/api/version.test.ts (0 test)
+ ÔØ» src/App.test.tsx (0 test)
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ» Failed Suites 2 ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+
+ FAIL  src/App.test.tsx [ src/App.test.tsx ]
+Error: Failed to resolve import "./App" from "src/App.test.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: C:/Users/60073/Python/New_Stat_Forge_v2/apps/web/src/App.test.tsx:2:20
+  1  |  import { render, screen } from "@testing-library/react";
+  2  |  import { App } from "./App";
+     |                       ^
+  3  |  var _jsxFileName = "C:/Users/60073/Python/New_Stat_Forge_v2/apps/web/src/App.test.tsx";
+  4  |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
+ ÔØ» TransformPluginContext._formatLog 
+../../node_modules/.pnpm/vite@8.3.4/node_modules/vite/dist/node/chunks/node.js:8766:39
+ ÔØ» TransformPluginContext.error 
+../../node_modules/.pnpm/vite@8.3.4/node_modules/vite/dist/node/chunks/node.js:8763:14
+ ÔØ» normalizeUrl ../../node_modules/.pnpm/vite@8.3.4/node_modules/vite/dist/node/chunks/node.js:26632:18
+ ÔØ» ../../node_modules/.pnpm/vite@8.3.4/node_modules/vite/dist/node/chunks/node.js:26702:30
+ ÔØ» TransformPluginContext.transform 
+../../node_modules/.pnpm/vite@8.3.4/node_modules/vite/dist/node/chunks/node.js:26668:4
+ ÔØ» EnvironmentPluginContainer.transform 
+../../node_modules/.pnpm/vite@8.3.4/node_modules/vite/dist/node/chunks/node.js:8545:14
+ ÔØ» loadAndTransform ../../node_modules/.pnpm/vite@8.3.4/node_modules/vite/dist/node/chunks/node.js:20184:26
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[1/2]ÔÄ»
+
+ FAIL  src/api/version.test.ts [ src/api/version.test.ts ]
+Error: Failed to resolve import "./version" from "src/api/version.test.ts". Does the file exist?
+  Plugin: vite:import-analysis
+  File: C:/Users/60073/Python/New_Stat_Forge_v2/apps/web/src/api/version.test.ts:1:29
+  1  |  import { fetchVersion } from "./version";
+     |                                ^
+  2  |  const respond = (body, status = 200) => () => Promise.resolve(new Response(JSON.stringify(body), { status }));
+  3  |  describe("fetchVersion", () => {
+ ÔØ» TransformPluginContext._formatLog 
+../../node_modules/.pnpm/vite@8.3.4/node_modules/vite/dist/node/chunks/node.js:8766:39
+ ÔØ» TransformPluginContext.error 
+../../node_modules/.pnpm/vite@8.3.4/node_modules/vite/dist/node/chunks/node.js:8763:14
+ ÔØ» normalizeUrl ../../node_modules/.pnpm/vite@8.3.4/node_modules/vite/dist/node/chunks/node.js:26632:18
+ ÔØ» ../../node_modules/.pnpm/vite@8.3.4/node_modules/vite/dist/node/chunks/node.js:26702:30
+ ÔØ» TransformPluginContext.transform 
+../../node_modules/.pnpm/vite@8.3.4/node_modules/vite/dist/node/chunks/node.js:26668:4
+ ÔØ» EnvironmentPluginContainer.transform 
+../../node_modules/.pnpm/vite@8.3.4/node_modules/vite/dist/node/chunks/node.js:8545:14
+ ÔØ» loadAndTransform ../../node_modules/.pnpm/vite@8.3.4/node_modules/vite/dist/node/chunks/node.js:20184:26
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[2/2]ÔÄ»
+
+
+ Test Files  2 failed (2)
+      Tests  no tests
+   Start at  00:30:46
+   Duration  1.53s (environment 80%, setup 16%, transform 4%, worker 1%)
+
+[ELIFECYCLE] Test failed. See above for more details.
+Error: ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL
+
+  ├ù "pnpm recursive run" failed in C:
+  Ôöé \Users\60073\Python\New_Stat_Forge_v2\apps/web
+
+
+Exit code: 1
