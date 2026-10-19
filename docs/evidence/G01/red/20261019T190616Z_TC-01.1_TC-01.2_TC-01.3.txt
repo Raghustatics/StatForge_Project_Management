@@ -1,0 +1,97 @@
+﻿RED evidence for TC-01.1_TC-01.2_TC-01.3 (G01) at 20261019T190616Z UTC
+Command: uv run pytest scripts/tests/test_cold_start_unit.py tests/integration -m 'integration or not integration' -q; pnpm --filter @statforge/web e2e
+
+=================================== ERRORS ====================================
+___________ ERROR collecting scripts/tests/test_cold_start_unit.py ____________
+ImportError while importing test module 'C:\Users\60073\Python\New_Stat_Forge_v2\scripts\tests\test_cold_start_unit.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+scripts\tests\test_cold_start_unit.py:8: in <module>
+    import cold_start
+E   ModuleNotFoundError: No module named 'cold_start'
+____________ ERROR collecting tests/integration/test_cold_start.py ____________
+ImportError while importing test module 'C:\Users\60073\Python\New_Stat_Forge_v2\tests\integration\test_cold_start.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+tests\integration\test_cold_start.py:5: in <module>
+    import cold_start
+E   ModuleNotFoundError: No module named 'cold_start'
+=========================== short test summary info ===========================
+ERROR scripts/tests/test_cold_start_unit.py
+ERROR tests/integration/test_cold_start.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!
+2 errors in 0.11s
+powershell.exe : $ playwright test
+At C:\Users\60073\Python\New_Stat_Forge_v2\scripts\capture_red.ps1:24 char:11
++ $output = & (Join-Path $PSHOME "powershell.exe") -NoProfile -Command  ...
++           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ($ playwright test:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+Running 2 tests using 1 worker
+
+  Ô£ÿ  1 [chromium] ÔÇ║ e2e\placeholder.spec.ts:4:1 ÔÇ║ [TC-01.3] page shows the version served by /api/v1/version (311ms)
+  Ô£ÿ  2 [chromium] ÔÇ║ e2e\placeholder.spec.ts:13:1 ÔÇ║ [TC-01.3] placeholder page has no serious or critical axe violations (218ms)
+
+
+  1) [chromium] ÔÇ║ e2e\placeholder.spec.ts:4:1 ÔÇ║ [TC-01.3] page shows the version served by /api/v1/version 
+
+    AggregateError: apiRequestContext.get: connect ECONNREFUSED ::1:8080
+    connect ECONNREFUSED 127.0.0.1:8080
+    Call log:
+      - ÔåÆ GET http://localhost:8080/api/v1/version
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+
+        at apiRequestContext.get: connect ECONNREFUSED ::1:8080
+        at C:\Users\60073\Python\New_Stat_Forge_v2\apps\web\e2e\placeholder.spec.ts:5:34
+
+    Error Context: test-results\placeholder--TC-01-3-page--e9ca4-on-served-by-api-v1-version-chromium\error-context.md
+
+    attachment #2: trace (application/zip) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    test-results\placeholder--TC-01-3-page--e9ca4-on-served-by-api-v1-version-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\placeholder--TC-01-3-page--e9ca4-on-served-by-api-v1-version-chromium\trace.zip
+
+    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+  2) [chromium] ÔÇ║ e2e\placeholder.spec.ts:13:1 ÔÇ║ [TC-01.3] placeholder page has no serious or critical axe violations 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+    Call log:
+      - navigating to "http://localhost:8080/", waiting until "load"
+
+
+      12 |
+      13 | test("[TC-01.3] placeholder page has no serious or critical axe violations", async ({ page }) => {
+    > 14 |   await page.goto("/");
+         |              ^
+      15 |   await expect(page.getByText(/API v1 ┬À version/)).toBeVisible();
+      16 |   const results = await new AxeBuilder({ page }).analyze();
+      17 |   const blocking = results.violations.filter(
+        at C:\Users\60073\Python\New_Stat_Forge_v2\apps\web\e2e\placeholder.spec.ts:14:14
+
+    Error Context: test-results\placeholder--TC-01-3-place-d91c7--or-critical-axe-violations-chromium\error-context.md
+
+    attachment #2: trace (application/zip) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    test-results\placeholder--TC-01-3-place-d91c7--or-critical-axe-violations-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\placeholder--TC-01-3-place-d91c7--or-critical-axe-violations-chromium\trace.zip
+
+    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+  2 failed
+    [chromium] ÔÇ║ e2e\placeholder.spec.ts:4:1 ÔÇ║ [TC-01.3] page shows the version served by /api/v1/version 
+    [chromium] ÔÇ║ e2e\placeholder.spec.ts:13:1 ÔÇ║ [TC-01.3] placeholder page has no serious or critical axe violations 
+[ELIFECYCLE] Command failed with exit code 1.
+Error: ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL
+
+  ├ù "pnpm recursive run" failed in C:
+  Ôöé \Users\60073\Python\New_Stat_Forge_v2\apps/web
+
+
+Exit code: 1

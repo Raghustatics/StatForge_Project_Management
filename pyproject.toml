@@ -42,13 +42,14 @@ select = ["E", "F", "W", "I", "B", "UP", "S", "SIM", "RUF"]
 [tool.mypy]
 python_version = "3.14"
 strict = true
+mypy_path = ["scripts", "tests/integration"]
 files = ["scripts", "tests", "apps/api/src", "apps/api/tests", "packages/engine/src", "packages/engine/tests"]
 exclude = ["^sources/"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests", "scripts/tests", "apps/api/tests", "packages/engine/tests"]
-pythonpath = ["scripts"]
-addopts = "--strict-markers -ra --import-mode=importlib"
+pythonpath = ["scripts", "tests/integration"]
+addopts = "--strict-markers -ra --import-mode=importlib -m 'not integration'"
 markers = [
     "tc(id): maps a test to a gate test case, e.g. tc('TC-01.2') (AGENTS.md §4.1)",
     "integration: needs the running docker compose stack",
