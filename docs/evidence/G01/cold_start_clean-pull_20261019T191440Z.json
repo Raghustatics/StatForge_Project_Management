@@ -1,0 +1,19 @@
+{
+  "limit_seconds": 180,
+  "condition": "clean-pull",
+  "seconds": 51.9,
+  "healthy": {
+    "web": true,
+    "api": true,
+    "db": true,
+    "s3": true
+  },
+  "absent_before": {
+    "postgres:18-alpine": true,
+    "chrislusf/seaweedfs:4.48": true,
+    "python:3.14-slim": true,
+    "ghcr.io/astral-sh/uv:0.10.1": true,
+    "node:24-alpine": true,
+    "nginx:1-alpine": true
+  }
+}

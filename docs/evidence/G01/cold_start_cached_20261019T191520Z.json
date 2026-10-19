@@ -1,0 +1,12 @@
+{
+  "limit_seconds": 180,
+  "condition": "cached",
+  "seconds": 21.6,
+  "healthy": {
+    "web": true,
+    "api": true,
+    "db": true,
+    "s3": true
+  },
+  "absent_before": {}
+}
