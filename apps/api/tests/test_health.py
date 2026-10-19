@@ -8,7 +8,7 @@ from collections.abc import Iterator
 
 import pytest
 from fastapi.testclient import TestClient
-from statforge_api.health import CheckResult, check_db
+from statforge_api.health import CheckResult, check_db, check_s3
 from statforge_api.main import create_app
 
 OK = CheckResult(status="ok")
@@ -116,3 +116,22 @@ def test_health_is_bounded_when_a_check_hangs() -> None:
         "detail": "The database is not reachable.",
     }
     assert response.json()["components"]["s3"]["status"] == "ok"
+
+
+@pytest.mark.tc("TC-01.2")
+def test_check_s3_down_when_unreachable(caplog: pytest.LogCaptureFixture) -> None:
+    caplog.set_level(logging.DEBUG)
+    result = check_s3("http://127.0.0.1:1", "key-id", "s3cretkey", timeout_s=0.5)
+    assert result == CheckResult(status="down", detail="File storage is not reachable.")
+    assert "s3cretkey" not in caplog.text
+
+
+@pytest.mark.tc("TC-01.2")
+def test_default_checks_read_settings_from_environment(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("DATABASE_URL", "postgresql://u:p@127.0.0.1:1/x")
+    monkeypatch.setenv("S3_ENDPOINT_URL", "http://127.0.0.1:1")
+    monkeypatch.setenv("S3_ACCESS_KEY", "a")
+    monkeypatch.setenv("S3_SECRET_KEY", "b")
+    response = TestClient(create_app()).get("/health")
+    assert response.status_code == 503
+    assert {c["status"] for c in response.json()["components"].values()} == {"down"}

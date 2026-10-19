@@ -1,5 +1,6 @@
 """TC-01.8: the test-first commit guard blocks product code without tests for the gate."""
 
+import io
 import json
 import subprocess
 import sys
@@ -191,3 +192,35 @@ def test_precommit_mode(repo: Path) -> None:
     )
     assert result.returncode == 1
     assert "apps/web" in result.stderr
+
+
+def _main_in(repo: Path, monkeypatch: pytest.MonkeyPatch, argv: list[str], stdin: str = "") -> int:
+    monkeypatch.chdir(repo)
+    monkeypatch.setattr(sys, "stdin", io.StringIO(stdin))
+    return commit_guard.main(argv)
+
+
+def test_main_in_process_hook_and_precommit(
+    repo: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    code = repo / "apps" / "api" / "src" / "demo.py"
+    code.parent.mkdir(parents=True)
+    code.write_text("X = 1\n")
+    _git(repo, "add", "apps")
+    commit = json.dumps({"tool_input": {"command": "git commit -m x"}})
+    assert _main_in(repo, monkeypatch, ["--hook"], commit) == 2
+    assert "test-first guard" in capsys.readouterr().err
+    assert _main_in(repo, monkeypatch, ["--hook"], json.dumps({"tool_input": {}})) == 0
+    assert _main_in(repo, monkeypatch, ["--precommit"]) == 1
+    test = repo / "apps" / "api" / "tests" / "test_demo.py"
+    test.parent.mkdir(parents=True)
+    test.write_text(G01_TEST)
+    _git(repo, "add", "apps")
+    assert _main_in(repo, monkeypatch, ["--hook"], commit) == 0
+    assert _main_in(repo, monkeypatch, ["--precommit"]) == 0
+
+
+def test_main_allows_outside_a_gated_repo(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    _git(tmp_path, "init", "-q")
+    commit = json.dumps({"tool_input": {"command": "git commit -m x"}})
+    assert _main_in(tmp_path, monkeypatch, ["--hook"], commit) == 0

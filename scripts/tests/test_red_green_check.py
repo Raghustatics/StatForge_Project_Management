@@ -1,6 +1,11 @@
 """TC-01.10: RED runs and RED commits come before the matching GREEN commits."""
 
+import os
+import subprocess
+from pathlib import Path
+
 import pytest
+import red_green_check
 from red_green_check import Commit, Evidence, check, evidence_from_file
 
 pytestmark = pytest.mark.tc("TC-01.10")
@@ -79,3 +84,35 @@ def test_evidence_from_filename() -> None:
     evidence = evidence_from_file("20261019T185520Z_TC-01.4_TC-01.9.txt", "Exit code: 1 FAILED")
     assert evidence.tcs == frozenset({"TC-01.4", "TC-01.9"})
     assert evidence.timestamp == 1_792_436_120
+
+
+def test_main_on_a_real_git_history(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    def git(*args: str, when: str | None = None) -> None:
+        env = dict(os.environ)
+        if when:
+            env.update(GIT_AUTHOR_DATE=when, GIT_COMMITTER_DATE=when)
+        subprocess.run(["git", *args], cwd=tmp_path, check=True, capture_output=True, env=env)
+
+    (tmp_path / "docs" / "evidence" / "G01" / "red").mkdir(parents=True)
+    (tmp_path / "docs" / "GATE_LOG.md").write_text("- **Active gate:** G01: x\n")
+    (tmp_path / "docs" / "StatForge_Gate_Map_v1.0.md").write_text(
+        "#### G01 · x\n  - TC-01.1 a.\n", encoding="utf-8"
+    )
+    git("init", "-q")
+    git("config", "user.name", "t")
+    git("config", "user.email", "t@example.invalid")
+    red = tmp_path / "docs" / "evidence" / "G01" / "red" / "20261019T100000Z_TC-01.1.txt"
+    red.write_text("1 failed")
+    git("add", ".")
+    git("commit", "-qm", "test(G01): RED for TC-01.1 x", when="2026-10-19T10:00:05Z")
+    assert red_green_check.main(["--root", str(tmp_path)]) == 1
+    (tmp_path / "x.py").write_text("X = 1\n")
+    git("add", ".")
+    git("commit", "-qm", "feat(G01): GREEN TC-01.1 x", when="2026-10-19T10:00:09Z")
+    assert red_green_check.main(["--root", str(tmp_path)]) == 0
+    assert "red_green_check G01: PASS" in capsys.readouterr().out
+
+
+def test_evidence_file_without_timestamp_rejected() -> None:
+    with pytest.raises(ValueError, match="timestamp"):
+        evidence_from_file("TC-01.1.txt", "failed")
