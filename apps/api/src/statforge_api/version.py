@@ -1,4 +1,5 @@
 """API version information."""
+import os  # deliberate lint error (F401) for TC-01.4
 
 from importlib.metadata import version
 from typing import Literal
