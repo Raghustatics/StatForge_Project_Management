@@ -1,7 +1,6 @@
 """Deliberately untested code to drop coverage below 85% (TC-01.9 ci-check)."""
 
 
-
 def uncovered_0(x: int) -> int:
     y = x + 0
     z = y * 2
