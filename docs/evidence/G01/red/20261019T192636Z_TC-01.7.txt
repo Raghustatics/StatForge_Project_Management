@@ -1,0 +1,17 @@
+﻿RED evidence for TC-01.7 (G01) at 20261019T192636Z UTC
+Command: uv run pytest scripts/tests/test_stop_hook.py scripts/tests/test_verify_ps1.py tests/repo/test_claude_settings.py -q
+
+=================================== ERRORS ====================================
+______________ ERROR collecting scripts/tests/test_stop_hook.py _______________
+ImportError while importing test module 'C:\Users\60073\Python\New_Stat_Forge_v2\scripts\tests\test_stop_hook.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+scripts\tests\test_stop_hook.py:7: in <module>
+    from stop_hook import HookOutcome, VerifyResult, run_hook
+E   ModuleNotFoundError: No module named 'stop_hook'
+=========================== short test summary info ===========================
+ERROR scripts/tests/test_stop_hook.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.13s
+
+Exit code: 1
