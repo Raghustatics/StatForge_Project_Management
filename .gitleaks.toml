@@ -1,0 +1,21 @@
+# Secret-scan rules: gitleaks defaults plus StatForge allowlists (TC-01.5, AGENTS.md §11).
+title = "StatForge gitleaks config"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Local-only placeholder values documented in .env.example"
+regexTarget = "match"
+regexes = ['''change-me-local-only''']
+
+[[allowlists]]
+description = "Not part of the product tree: read-only inputs, dependencies, build output"
+paths = [
+  '''(^|/)sources/''',
+  '''(^|/)node_modules/''',
+  '''(^|/)\.venv/''',
+  '''(^|/)dist/''',
+  '''(^|/)\.superpowers/''',
+  '''(^|/)(coverage|playwright-report|test-results)/''',
+]
