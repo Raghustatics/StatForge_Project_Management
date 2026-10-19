@@ -1,0 +1,98 @@
+﻿RED evidence for TC-01.5 (G01) at 20261019T191559Z UTC
+Command: uv run pytest tests/repo/test_secret_scan.py -q
+FFF                                                                      [100%]
+================================== FAILURES ===================================
+_____________________ test_repo_history_has_zero_secrets ______________________
+
+tmp_path = WindowsPath('C:/Users/60073/AppData/Local/Temp/pytest-of-raghu.sinha/pytest-11/test_repo_history_has_zero_sec0')
+
+    def test_repo_history_has_zero_secrets(tmp_path: Path) -> None:
+        report = tmp_path / "history.json"
+>       result = _run(
+            "git", str(ROOT), "--config", str(CONFIG), "--redact", "--exit-code", "1",
+            "--report-format", "json", "--report-path", str(report),
+        )
+
+tests\repo\test_secret_scan.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\repo\test_secret_scan.py:27: in _run
+    [_gitleaks(), *args], cwd=cwd, capture_output=True, text=True, check=False
+     ^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def _gitleaks() -> str:
+        found = shutil.which("gitleaks")
+        if found is None:
+>           pytest.fail("gitleaks not installed ù run scripts/install_tools.ps1")
+E           Failed: gitleaks not installed ù run scripts/install_tools.ps1
+
+tests\repo\test_secret_scan.py:21: Failed
+_____________________ test_working_tree_has_zero_secrets ______________________
+
+tmp_path = WindowsPath('C:/Users/60073/AppData/Local/Temp/pytest-of-raghu.sinha/pytest-11/test_working_tree_has_zero_sec0')
+
+    def test_working_tree_has_zero_secrets(tmp_path: Path) -> None:
+        report = tmp_path / "tree.json"
+>       result = _run(
+            "dir", str(ROOT), "--config", str(CONFIG), "--redact", "--exit-code", "1",
+            "--report-format", "json", "--report-path", str(report),
+        )
+
+tests\repo\test_secret_scan.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\repo\test_secret_scan.py:27: in _run
+    [_gitleaks(), *args], cwd=cwd, capture_output=True, text=True, check=False
+     ^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def _gitleaks() -> str:
+        found = shutil.which("gitleaks")
+        if found is None:
+>           pytest.fail("gitleaks not installed ù run scripts/install_tools.ps1")
+E           Failed: gitleaks not installed ù run scripts/install_tools.ps1
+
+tests\repo\test_secret_scan.py:21: Failed
+_______________________ test_planted_secret_is_detected _______________________
+
+tmp_path = WindowsPath('C:/Users/60073/AppData/Local/Temp/pytest-of-raghu.sinha/pytest-11/test_planted_secret_is_detecte0')
+
+    def test_planted_secret_is_detected(tmp_path: Path) -> None:
+        # D-032b: the token exists only at runtime, inside a throwaway repo outside the project.
+        alphabet = string.ascii_letters + string.digits
+        token = "ghp_" + "".join(secrets.choice(alphabet) for _ in range(36))
+        repo = tmp_path / "planted"
+        repo.mkdir()
+        (repo / "settings.py").write_text(f'GITHUB_TOKEN = "{token}"\n', encoding="utf-8")
+        for cmd in (
+            ["git", "init", "-q"],
+            ["git", "add", "settings.py"],
+            ["git", "-c", "user.name=t", "-c", "user.email=t@example.invalid", "commit", "-qm", "x"],
+        ):
+            subprocess.run(cmd, cwd=repo, check=True, capture_output=True)
+        report = tmp_path / "planted.json"
+>       result = _run(
+            "git", str(repo), "--redact", "--exit-code", "1",
+            "--report-format", "json", "--report-path", str(report), cwd=repo,
+        )
+
+tests\repo\test_secret_scan.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\repo\test_secret_scan.py:27: in _run
+    [_gitleaks(), *args], cwd=cwd, capture_output=True, text=True, check=False
+     ^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def _gitleaks() -> str:
+        found = shutil.which("gitleaks")
+        if found is None:
+>           pytest.fail("gitleaks not installed ù run scripts/install_tools.ps1")
+E           Failed: gitleaks not installed ù run scripts/install_tools.ps1
+
+tests\repo\test_secret_scan.py:21: Failed
+=========================== short test summary info ===========================
+FAILED tests/repo/test_secret_scan.py::test_repo_history_has_zero_secrets - F...
+FAILED tests/repo/test_secret_scan.py::test_working_tree_has_zero_secrets - F...
+FAILED tests/repo/test_secret_scan.py::test_planted_secret_is_detected - Fail...
+3 failed in 0.25s
+
+Exit code: 1
