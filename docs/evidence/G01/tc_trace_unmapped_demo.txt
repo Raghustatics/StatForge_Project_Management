@@ -1,0 +1,20 @@
+TC-01.1   MISSING
+TC-01.2   MISSING
+TC-01.3   MISSING
+TC-01.4   MISSING
+TC-01.5   OK       tests/repo/test_repo_hygiene.py::test_tc01_5_minitab_fixtures_never_tracked
+TC-01.6   OK       scripts/tests/test_tc_trace.py::test_active_gate_parsed
+TC-01.6   OK       scripts/tests/test_tc_trace.py::test_gate_test_cases_reads_only_that_section
+TC-01.6   OK       scripts/tests/test_tc_trace.py::test_trace_fails_when_tc_unmapped
+TC-01.6   OK       scripts/tests/test_tc_trace.py::test_trace_passes_when_all_mapped_by_marker_and_name
+TC-01.6   OK       scripts/tests/test_tc_trace.py::test_trace_passes_with_vitest_title
+TC-01.6   OK       scripts/tests/test_tc_trace.py::test_module_pytestmark_maps_every_test
+TC-01.6   OK       scripts/tests/test_tc_trace.py::test_skipped_or_xfail_mapping_fails
+TC-01.6   OK       scripts/tests/test_tc_trace.py::test_ignores_node_modules
+TC-01.6   OK       scripts/tests/test_tc_trace.py::test_is_test_file
+TC-01.6   OK       scripts/tests/test_tc_trace.py::test_tc_ids_in
+TC-01.7   MISSING
+TC-01.8   MISSING
+TC-01.9   MISSING
+TC-01.10  MISSING
+tc_trace G01: FAIL

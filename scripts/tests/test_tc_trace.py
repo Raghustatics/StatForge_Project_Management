@@ -3,7 +3,6 @@
 from pathlib import Path
 
 import pytest
-
 import tc_trace
 
 pytestmark = pytest.mark.tc("TC-01.6")
