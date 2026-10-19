@@ -3,9 +3,17 @@ name = "statforge"
 version = "0.1.0"
 description = "StatForge monorepo root (uv workspace)"
 requires-python = ">=3.14"
+dependencies = ["statforge-api", "statforge-engine"]
 
 [tool.uv]
 package = false
+
+[tool.uv.workspace]
+members = ["apps/api", "packages/engine"]
+
+[tool.uv.sources]
+statforge-api = { workspace = true }
+statforge-engine = { workspace = true }
 
 [dependency-groups]
 dev = [
@@ -16,6 +24,7 @@ dev = [
     "httpx>=0.28",
     "pyyaml>=6",
     "types-pyyaml>=6",
+    "boto3-stubs[s3]>=1.40",
 ]
 
 [tool.ruff]
@@ -33,7 +42,7 @@ select = ["E", "F", "W", "I", "B", "UP", "S", "SIM", "RUF"]
 [tool.mypy]
 python_version = "3.14"
 strict = true
-files = ["scripts", "tests"]
+files = ["scripts", "tests", "apps/api/src", "apps/api/tests", "packages/engine/src", "packages/engine/tests"]
 exclude = ["^sources/"]
 
 [tool.pytest.ini_options]
@@ -48,7 +57,7 @@ markers = [
 
 [tool.coverage.run]
 branch = true
-source = ["scripts"]
+source = ["scripts", "apps/api/src", "packages/engine/src"]
 omit = ["*/tests/*"]
 
 [tool.coverage.report]
