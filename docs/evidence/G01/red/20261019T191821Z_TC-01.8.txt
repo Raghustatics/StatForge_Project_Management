@@ -1,0 +1,17 @@
+﻿RED evidence for TC-01.8 (G01) at 20261019T191821Z UTC
+Command: uv run pytest scripts/tests/test_commit_guard.py -q
+
+=================================== ERRORS ====================================
+_____________ ERROR collecting scripts/tests/test_commit_guard.py _____________
+ImportError while importing test module 'C:\Users\60073\Python\New_Stat_Forge_v2\scripts\tests\test_commit_guard.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+scripts\tests\test_commit_guard.py:8: in <module>
+    import commit_guard
+E   ModuleNotFoundError: No module named 'commit_guard'
+=========================== short test summary info ===========================
+ERROR scripts/tests/test_commit_guard.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.11s
+
+Exit code: 1
