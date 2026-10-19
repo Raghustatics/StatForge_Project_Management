@@ -13,6 +13,7 @@ Modes:
 from __future__ import annotations
 
 import argparse
+import io
 import json
 import re
 import subprocess
@@ -130,7 +131,15 @@ def _decide(include_unstaged: bool) -> GuardDecision:
     return evaluate(staged, tests, active_gate(gate_log))
 
 
+def _utf8_streams() -> None:
+    """Hook output is read as UTF-8; Windows would otherwise pipe it as cp1252."""
+    for stream in (sys.stdout, sys.stderr):
+        if isinstance(stream, io.TextIOWrapper):
+            stream.reconfigure(encoding="utf-8")
+
+
 def main(argv: Sequence[str] | None = None) -> int:
+    _utf8_streams()
     parser = argparse.ArgumentParser(description="Test-first commit guard")
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--hook", action="store_true")

@@ -235,3 +235,16 @@ def test_hook_from_a_subdirectory_uses_repo_root_paths(repo: Path) -> None:
     test.write_text(G01_TEST)
     _git(repo, "add", "apps")
     assert _hook(repo / "apps" / "api", "git commit -m demo").returncode == 0
+
+
+def test_hook_messages_are_utf8_encoded(repo: Path) -> None:
+    code = repo / "apps" / "api" / "src" / "demo.py"
+    code.parent.mkdir(parents=True)
+    code.write_text("X = 1\n")
+    _git(repo, "add", "apps")
+    payload = json.dumps({"tool_input": {"command": "git commit -m x"}}).encode()
+    result = subprocess.run(
+        [sys.executable, str(SCRIPT), "--hook"], input=payload, cwd=repo, capture_output=True
+    )
+    assert result.returncode == 2
+    assert "AGENTS.md §4.1".encode() in result.stderr

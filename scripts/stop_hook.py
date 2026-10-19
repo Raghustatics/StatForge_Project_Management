@@ -8,6 +8,7 @@ regardless (D-031, D-032e).
 
 from __future__ import annotations
 
+import io
 import json
 import os
 import shutil
@@ -98,7 +99,15 @@ def _verify() -> VerifyResult:
     return VerifyResult(completed.returncode == 0, "\n".join(lines[-40:]))
 
 
+def _utf8_streams() -> None:
+    """Hook output is read as UTF-8; Windows would otherwise pipe it as cp1252."""
+    for stream in (sys.stdout, sys.stderr):
+        if isinstance(stream, io.TextIOWrapper):
+            stream.reconfigure(encoding="utf-8")
+
+
 def main() -> int:
+    _utf8_streams()
     raw = sys.stdin.read()
     payload = json.loads(raw) if raw.strip() else {}
     outcome = run_hook(payload, _verify, STATE)

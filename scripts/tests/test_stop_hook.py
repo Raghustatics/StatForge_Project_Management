@@ -54,3 +54,20 @@ def test_corrupt_state_file_is_treated_as_zero(tmp_path: Path) -> None:
     state = tmp_path / "state.json"
     state.write_text("{not json")
     assert _run(state, FAILING).exit_code == 2
+
+
+def test_main_writes_utf8(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    import io
+    import sys
+
+    import stop_hook
+
+    raw = io.BytesIO()
+    stream = io.TextIOWrapper(raw, encoding="cp1252")
+    monkeypatch.setattr(sys, "stdin", io.StringIO("{}"))
+    monkeypatch.setattr(sys, "stderr", stream)
+    monkeypatch.setattr(stop_hook, "STATE", tmp_path / "s.json")
+    monkeypatch.setattr(stop_hook, "_verify", lambda: FAILING)
+    assert stop_hook.main() == 2
+    sys.stderr.flush()
+    assert "is failing — the work".encode() in raw.getvalue()
